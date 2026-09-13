@@ -12,7 +12,7 @@
 //  Cole abaixo a URL do seu Google Apps Script Web App.
 //  Exemplo: 'https://script.google.com/macros/s/SEU_ID/exec'
 // ============================================================
-const API_URL = 'https://script.google.com/macros/s/AKfycbxuDeE-K2chY4FjcT-7dDQq1U75QtEUBfD0ZxceaVkZi5F7PKDzhr6PMiDjT12mqd4o/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbwCnduCuLkn7f2YmVV3aRrJmpZYiZF5Lr24erFrZZIl4L3PMogw6PaXDY7nrd5MUKVJ/exec';
 
 // ============================================================
 //  ESTADO LOCAL (cache)
@@ -738,5 +738,44 @@ async function confirmarSenhaManutencao() {
   if (radioId && novoStatus) {
     await alterarStatusRadio(radioId, novoStatus);
   }
+}
+
+// ============================================================
+//  MODAL DE SENHA PARA ACESSO (CADASTRO)
+// ============================================================
+function abrirModalSenhaAcesso() {
+  const inputSenha = document.getElementById('inputSenhaAcesso');
+  if (inputSenha) inputSenha.value = '';
+
+  const feedbackEl = document.getElementById('feedbackSenhaAcesso');
+  if (feedbackEl) clearFeedback(feedbackEl);
+
+  const modal = document.getElementById('modalSenhaAcesso');
+  if (modal) modal.classList.add('open');
+
+  // Foca no input após abrir
+  setTimeout(() => {
+    if (inputSenha) inputSenha.focus();
+  }, 100);
+}
+
+function fecharModalSenhaAcesso() {
+  const modal = document.getElementById('modalSenhaAcesso');
+  if (modal) modal.classList.remove('open');
+}
+
+function confirmarSenhaAcesso() {
+  const inputSenha = document.getElementById('inputSenhaAcesso');
+  const feedbackEl = document.getElementById('feedbackSenhaAcesso');
+
+  if (feedbackEl) clearFeedback(feedbackEl);
+
+  if (!inputSenha || inputSenha.value !== '@Ferrovias') {
+    if (feedbackEl) showFeedback(feedbackEl, 'Senha incorreta!', 'error');
+    return;
+  }
+
+  fecharModalSenhaAcesso();
+  showScreen('cadastro');
 }
 
