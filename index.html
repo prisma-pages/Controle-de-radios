@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestão e Controle de Rádios – Sistema Inteligente</title>
+  <meta name="description"
+    content="Sistema inteligente de gestão e controle de rádios comunicadores, com dashboard em tempo real, registro de retiradas e devoluções via bipagem." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9" />
+          <path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5" />
+          <circle cx="12" cy="12" r="2" />
+          <path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5" />
+          <path d="M19.1 4.9C23 8.8 23 15.2 19.1 19.1" />
+        </svg>
+      </div>
+      <span class="logo-text">RádioCtrl</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-btn active" id="nav-dashboard" onclick="showScreen('dashboard')" title="Dashboard">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" />
+          <rect x="14" y="3" width="7" height="7" />
+          <rect x="14" y="14" width="7" height="7" />
+          <rect x="3" y="14" width="7" height="7" />
+        </svg>
+        <span class="nav-label">Dashboard</span>
+      </button>
+
+      <button class="nav-btn" id="nav-cadastro" onclick="abrirModalSenhaAcesso()" title="Gerenciamento">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="12" y1="18" x2="12" y2="12" />
+          <line x1="9" y1="15" x2="15" y2="15" />
+        </svg>
+        <span class="nav-label">Cadastros</span>
+      </button>
+
+      <button class="nav-btn" id="nav-historico" onclick="showScreen('historico')" title="Historico">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </svg>
+        <span class="nav-label">Histórico</span>
+      </button>
+    </nav>
+
+  </aside>
+
+  <!-- ===================== MAIN CONTENT ===================== -->
+  <main class="main-content" id="mainContent">
+
+    <!-- ========== SCREEN: DASHBOARD ========== -->
+    <section class="screen active" id="screen-dashboard">
+
+      <header class="page-header">
+        <div class="page-header-left">
+          <p class="page-subtitle">Gestão Visual</p>
+          <h1 class="page-title">Dashboard</h1>
+        </div>
+        <div class="page-header-right">
+          <div class="clock-widget" id="clockWidget">
+            <div class="clock-time" id="clockTime">00:00:00</div>
+            <div class="clock-date" id="clockDate">--/--/----</div>
+          </div>
+          <button class="btn-icon-refresh" onclick="loadDashboardData()" title="Atualizar dados">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 4 23 10 17 10" />
+              <polyline points="1 20 1 14 7 14" />
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- KPI Cards -->
+      <div class="kpi-grid">
+        <div class="kpi-card kpi-purple">
+          <div class="kpi-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9" />
+              <path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5" />
+              <circle cx="12" cy="12" r="2" />
+              <path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5" />
+              <path d="M19.1 4.9C23 8.8 23 15.2 19.1 19.1" />
+            </svg>
+          </div>
+          <div class="kpi-info">
+            <div class="kpi-value" id="kpiTotal">--</div>
+            <div class="kpi-label">Total de Rádios</div>
+          </div>
+        </div>
+
+        <div class="kpi-card kpi-green">
+          <div class="kpi-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </div>
+          <div class="kpi-info">
+            <div class="kpi-value" id="kpiDisponivel">--</div>
+            <div class="kpi-label">Disponíveis</div>
+          </div>
+        </div>
+
+        <div class="kpi-card kpi-pink">
+          <div class="kpi-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+          </div>
+          <div class="kpi-info">
+            <div class="kpi-value" id="kpiEmUso">--</div>
+            <div class="kpi-label">Em Uso</div>
+          </div>
+        </div>
+
+        <div class="kpi-card kpi-orange">
+          <div class="kpi-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+            </svg>
+          </div>
+          <div class="kpi-info">
+            <div class="kpi-value" id="kpiManutencao">--</div>
+            <div class="kpi-label">Em Manutenção</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bipar Section + Table -->
+      <div class="dashboard-grid">
+
+        <!-- Bipar Card -->
+        <div class="card bipar-card">
+          <div class="card-header">
+            <div class="card-header-icon card-header-icon--purple">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="3" height="11" />
+                <rect x="7" y="6" width="3" height="16" />
+                <rect x="11" y="9" width="3" height="13" />
+                <rect x="15" y="4" width="3" height="18" />
+                <rect x="19" y="7" width="3" height="15" />
+              </svg>
+            </div>
+            <h2 class="card-title">Bipar Retirada / Devolução</h2>
+          </div>
+
+          <div class="bipar-steps">
+            <div class="bipar-step">
+              <div class="step-badge">1</div>
+              <div class="step-content">
+                <label class="step-label" for="inputColaborador">Cod. Barras ou Nome do Colaborador</label>
+                <div class="input-wrapper">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                  <input type="text" id="inputColaborador" class="modern-input"
+                    placeholder="Scanear cracha ou digitar nome..." autocomplete="off" />
+                </div>
+              </div>
+            </div>
+
+            <div class="bipar-step">
+              <div class="step-badge">2</div>
+              <div class="step-content">
+                <label class="step-label" for="inputRadio">ID do Rádio</label>
+                <div class="input-wrapper">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9" />
+                    <path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5" />
+                    <circle cx="12" cy="12" r="2" />
+                    <path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5" />
+                    <path d="M19.1 4.9C23 8.8 23 15.2 19.1 19.1" />
+                  </svg>
+                  <input type="text" id="inputRadio" class="modern-input"
+                    placeholder="Scanear ou digitar ID do radio..." autocomplete="off" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-registrar" id="btnRegistrar" onclick="registrarMovimentacao()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 11 12 14 22 4" />
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+            </svg>
+            Registrar Movimentação
+          </button>
+
+          <div class="feedback-msg" id="feedbackMsg"></div>
+        </div>
+
+        <!-- Status Table Card -->
+        <div class="card table-card">
+          <div class="card-header">
+            <div class="card-header-icon card-header-icon--pink">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="8" y1="6" x2="21" y2="6" />
+                <line x1="8" y1="12" x2="21" y2="12" />
+                <line x1="8" y1="18" x2="21" y2="18" />
+                <line x1="3" y1="6" x2="3.01" y2="6" />
+                <line x1="3" y1="12" x2="3.01" y2="12" />
+                <line x1="3" y1="18" x2="3.01" y2="18" />
+              </svg>
+            </div>
+            <h2 class="card-title">Status dos Rádios em Tempo Real</h2>
+            <div class="live-indicator">
+              <span class="live-dot"></span>
+              <span>Ativo</span>
+            </div>
+          </div>
+
+          <div class="table-wrapper">
+            <table class="data-table" id="tableRadios">
+              <thead>
+                <tr>
+                  <th>ID Rádio</th>
+                  <th>Modelo</th>
+                  <th>Status</th>
+                  <th>Colaborador Atual</th>
+                  <th>Função</th>
+                  <th>Última Atualização</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyRadios">
+                <tr>
+                  <td colspan="7" class="loading-cell">
+                    <div class="loading-spinner"></div>
+                    <span>Carregando dados...</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========== SCREEN: CADASTRO ========== -->
+    <section class="screen" id="screen-cadastro">
+
+      <header class="page-header">
+        <div class="page-header-left">
+          <p class="page-subtitle">Administração</p>
+          <h1 class="page-title">Gerenciamento de Cadastro</h1>
+        </div>
+      </header>
+
+      <div class="cadastro-grid">
+
+        <!-- Cadastrar Radio -->
+        <div class="card cadastro-form-card">
+          <div class="card-header">
+            <div class="card-header-icon card-header-icon--purple">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+            </div>
+            <h2 class="card-title">Cadastrar Novo Rádio</h2>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="radioId">ID do Rádio</label>
+            <input type="text" id="radioId" class="modern-input" placeholder="Ex: RAD-001" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="radioModelo">Modelo</label>
+            <input type="text" id="radioModelo" class="modern-input" placeholder="Ex: Motorola XT-420" />
+          </div>
+          <button class="btn-save" id="btnSalvarRadio" onclick="cadastrarRadio()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+              <polyline points="17 21 17 13 7 13 7 21" />
+              <polyline points="7 3 7 8 15 8" />
+            </svg>
+            Salvar Rádio
+          </button>
+          <div class="feedback-msg" id="feedbackRadio"></div>
+        </div>
+
+        <!-- Cadastrar Colaborador -->
+        <div class="card cadastro-form-card">
+          <div class="card-header">
+            <div class="card-header-icon card-header-icon--pink">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </div>
+            <h2 class="card-title">Cadastrar Novo Colaborador</h2>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="colabNome">Nome Completo</label>
+            <input type="text" id="colabNome" class="modern-input" placeholder="Nome do colaborador" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="colabSetor">Cargo / Função</label>
+            <input type="text" id="colabSetor" class="modern-input" placeholder="Ex: Oficial / Maquinista" />
+          </div>
+          <button class="btn-save btn-save--pink" id="btnSalvarColab" onclick="cadastrarColaborador()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+              <polyline points="17 21 17 13 7 13 7 21" />
+              <polyline points="7 3 7 8 15 8" />
+            </svg>
+            Salvar Colaborador
+          </button>
+          <div class="feedback-msg" id="feedbackColab"></div>
+        </div>
+
+        <!-- Lista de Radios -->
+        <div class="card list-card">
+          <div class="card-header">
+            <div class="card-header-icon card-header-icon--purple">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9" />
+                <path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5" />
+                <circle cx="12" cy="12" r="2" />
+                <path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5" />
+                <path d="M19.1 4.9C23 8.8 23 15.2 19.1 19.1" />
+              </svg>
+            </div>
+            <h2 class="card-title">Rádios Cadastrados</h2>
+            <div class="input-wrapper" style="padding: 6px 12px; margin-right: 12px; max-width: 200px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <input type="text" id="searchRadiosCadastro" class="modern-input" placeholder="Buscar por ID..."
+                oninput="filtrarListaRadios(this.value)" style="font-size: 0.8rem;" />
+            </div>
+            <span class="badge-count" id="countRadios">0</span>
+          </div>
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Modelo</th>
+                  <th>Status</th>
+                  <th>Ação</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyRadiosCadastro">
+                <tr>
+                  <td colspan="4" class="loading-cell">
+                    <div class="loading-spinner"></div><span>Carregando...</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Lista de Colaboradores -->
+        <div class="card list-card">
+          <div class="card-header">
+            <div class="card-header-icon card-header-icon--pink">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+            </div>
+            <h2 class="card-title">Colaboradores Cadastrados</h2>
+            <div class="input-wrapper" style="padding: 6px 12px; margin-right: 12px; max-width: 200px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <input type="text" id="searchColabs" class="modern-input" placeholder="Buscar por nome..."
+                oninput="filtrarListaColabs(this.value)" style="font-size: 0.8rem;" />
+            </div>
+            <span class="badge-count badge-count--pink" id="countColabs">0</span>
+          </div>
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Função</th>
+                  <th>Ação</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyColabs">
+                <tr>
+                  <td colspan="3" class="loading-cell">
+                    <div class="loading-spinner"></div><span>Carregando...</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========== SCREEN: HISTORICO ========== -->
+    <section class="screen" id="screen-historico">
+
+      <header class="page-header">
+        <div class="page-header-left">
+          <p class="page-subtitle">Relatórios</p>
+          <h1 class="page-title">Histórico de Movimentações</h1>
+        </div>
+        <div class="page-header-right">
+          <button class="btn-secondary" onclick="loadHistorico()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 4 23 10 17 10" />
+              <polyline points="1 20 1 14 7 14" />
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+            </svg>
+            Atualizar
+          </button>
+        </div>
+      </header>
+
+      <div class="card table-card" style="margin-top: 0; flex: 1;">
+        <div class="card-header">
+          <div class="card-header-icon card-header-icon--purple">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+          </div>
+          <h2 class="card-title">Histórico de Movimentações</h2>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Data/Hora</th>
+                <th>ID Rádio</th>
+                <th>Colaborador</th>
+                <th>Função</th>
+                <th>Tipo</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyHistorico">
+              <tr>
+                <td colspan="6" class="loading-cell">
+                  <div class="loading-spinner"></div><span>Carregando...</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer class="app-footer">
+      <p>2026 - <strong>Marlon Fernandes</strong> &amp; <strong>Larissa Teixeira</strong> — Sistema Inteligente de
+        Gestão de Rádios</p>
+    </footer>
+
+  </main>
+
+  <!-- TOAST -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- MODAL SENHA MANUTENCAO -->
+  <div class="modal-overlay" id="modalSenhaManutencao">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+          <h3 id="modalSenhaTitulo">Confirmar Manutenção</h3>
+        </div>
+        <button class="modal-close" onclick="fecharModalSenha()">&#x2715;</button>
+      </div>
+      <div class="modal-body">
+        <p id="modalSenhaDesc" style="color:var(--text-muted);margin-bottom:16px;font-size:0.85rem;">Digite a senha de
+          administrador para continuar.</p>
+        <label class="form-label">Senha de Administrador</label>
+        <div class="input-wrapper">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+          <input type="password" id="inputSenhaManutencao" class="modern-input" placeholder="Digite a senha..." />
+        </div>
+        <div class="feedback-msg" id="feedbackSenha"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="fecharModalSenha()">Cancelar</button>
+        <button class="btn-registrar" style="width:auto;padding:10px 24px;"
+          onclick="confirmarSenhaManutencao()">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- MODAL SENHA ACESSO -->
+  <div class="modal-overlay" id="modalSenhaAcesso">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+          <h3 id="modalSenhaAcessoTitulo">Acesso Administrativo</h3>
+        </div>
+        <button class="modal-close" onclick="fecharModalSenhaAcesso()">&#x2715;</button>
+      </div>
+      <div class="modal-body">
+        <p style="color:var(--text-muted);margin-bottom:16px;font-size:0.85rem;">Digite a senha de administrador para
+          acessar os cadastros.</p>
+        <label class="form-label">Senha de Administrador</label>
+        <div class="input-wrapper">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+          <input type="password" id="inputSenhaAcesso" class="modern-input" placeholder="Digite a senha..."
+            onkeydown="if(event.key === 'Enter') confirmarSenhaAcesso()" />
+        </div>
+        <div class="feedback-msg" id="feedbackSenhaAcesso"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="fecharModalSenhaAcesso()">Cancelar</button>
+        <button class="btn-registrar" style="width:auto;padding:10px 24px;"
+          onclick="confirmarSenhaAcesso()">Acessar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
