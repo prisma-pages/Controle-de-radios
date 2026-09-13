@@ -12,7 +12,7 @@
 //  Cole abaixo a URL do seu Google Apps Script Web App.
 //  Exemplo: 'https://script.google.com/macros/s/SEU_ID/exec'
 // ============================================================
-const API_URL = 'https://script.google.com/macros/s/AKfycbwTfuj7nsm_e3qW7sPzo0v0PxJNWG_G8LaHI0MCZ0HDH4NrlLM5WnoeIsPvu1r-lfZGMg/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbxuDeE-K2chY4FjcT-7dDQq1U75QtEUBfD0ZxceaVkZi5F7PKDzhr6PMiDjT12mqd4o/exec';
 
 // ============================================================
 //  ESTADO LOCAL (cache)
